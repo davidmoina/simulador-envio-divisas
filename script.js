@@ -36,7 +36,10 @@ do {
 } while(isNaN(dinero))
 
 let impuestoDescontar = conversion(dinero, comision);
-impuesto = prompt(`${nombre}, la conversion de divisa le costara ${impuestoDescontar} ${divisa}, ¿desea continuar? Si o No.`).toLowerCase();
+
+do {
+  impuesto = prompt(`${nombre}, la conversion de divisa le costara ${impuestoDescontar} ${divisa}, ¿desea continuar? Si o No.`).toLowerCase();
+} while(impuesto != "si" && impuesto != "no")
 
 let dineroTotal = total(dinero, impuestoDescontar);
 
