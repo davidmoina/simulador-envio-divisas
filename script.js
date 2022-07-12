@@ -51,5 +51,27 @@ if(impuesto === "si" && pais === "españa") {
   dineroFinal = conversion(dineroTotal, peso);
   alert(`Muchas gracias por usar nuestro servicio, le llegara a ${nombreDestinatario} en Argentina la cantidad de ${dineroFinal} pesos argentinos.`);
 } else {
+  dineroFinal = 0;
   alert("Muchas gracias por su tiempo");
 }
+
+class Envios {
+  constructor(remitente, destinatario, destino, cantidad, comision, cambio) {
+    this.remitente = remitente;
+    this.destinatario = destinatario;
+    this.destino = destino;
+    this.cantidad = cantidad;
+    this.comision = comision;
+    this.cambio = cambio;
+  }
+}
+
+const movimientos = [];
+const movimiento1 = new Envios(nombre, nombreDestinatario, pais, dinero, impuestoDescontar, dineroFinal);
+movimientos.push(movimiento1);
+
+console.log(movimientos);
+
+for (const datos of movimientos) {
+  console.log(datos);
+};
