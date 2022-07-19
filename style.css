@@ -1,0 +1,22 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: azure;
+}
+
+.tarjetaEnvios {
+  display: inline-block;
+  padding: 30px;
+}
+
+.movimientoGenerado {
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 20px;
+  background-color: bisque;
+  margin-bottom: 10px;
+}
+
+.movimientoGenerado h2 {
+  font-size: large;
+  font-weight: bold;
+}

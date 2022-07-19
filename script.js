@@ -76,10 +76,13 @@ do {
   const movimiento = new Envios(nombre, nombreDestinatario, pais, dinero, impuestoDescontar, dineroFinal);
   movimientos.push(movimiento);
 
+
   do {
     continuar = prompt("¿Desea hacer un nuevo envio? Si/No.").toLowerCase();
 
   } while(continuar != "si" && continuar != "no")
+
+  
 } while(continuar != "no")
 
 console.log(movimientos);
@@ -87,3 +90,17 @@ console.log(movimientos);
 for (const datos of movimientos) {
   console.log(datos);
 };
+
+const giros = document.getElementById("enviosGenerados");
+  
+movimientos.forEach(giro => {
+  giros.innerHTML += `
+    <div class="movimientoGenerado">
+      <h3>Movimiento</h3>
+      <p>Nombre: ${giro.remitente}</p>
+      <p>Destinatario: ${giro.destinatario}</p>
+      <p>Pais Destino: ${giro.destino}</p>
+      <p>Dinero Ingresado: ${giro.cambio}</p>
+    </div>
+  `
+});
