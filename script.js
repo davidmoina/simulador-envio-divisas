@@ -18,7 +18,60 @@ const euro = 0.007;
 const peso = 129.46;
 const comision = 0.05;
 
-let nombre, nombreDestinatario, dinero, impuesto, divisa, pais, continuar, impuestoDescontar;
+let nombre, nombreDestinatario, impuesto, divisa, continuar, dineroFinal, impuestoDescontar;
+
+let pais = document.getElementById("idPais");
+let textoDinero = document.getElementById("textoDinero");
+
+
+pais.addEventListener("change", () => {
+
+  if(pais.value === "españa") {
+    divisa = "pesos argentinos"
+  } else if(pais.value === "argentina") {
+    divisa = "euros"
+  }
+
+  textoDinero.innerHTML = `
+    Ingrese la cantidad en ${divisa} a enviar:
+  `
+});
+
+let dinero = document.getElementById("idDinero");
+let divComision = document.getElementById("divComision");
+
+
+//agregamos el texto debajo de la cantidad de dinero
+dinero.addEventListener("input", () => {
+
+  if(pais.value === "españa") {
+    divisa = "pesos argentinos"
+  } else if(pais.value === "argentina") {
+    divisa = "euros"
+  }
+
+  impuestoDescontar = parseFloat(conversion(dinero.value, comision).toFixed(2));
+
+  let dineroTotal = total(dinero.value, impuestoDescontar);
+    
+  if(pais.value === "españa") {
+    dineroFinal = conversion(dineroTotal, euro);
+
+  } else if(pais.value === "argentina") {
+    dineroFinal = conversion(dineroTotal, peso);
+  } else {
+    dineroFinal = 0;
+  }
+
+  divComision.innerHTML = `
+      <p>La conversion de divisa le costara ${impuestoDescontar} ${divisa}</p>
+    `
+})
+
+
+
+
+
 
 const form = document.getElementById("idForm");
 
@@ -27,39 +80,8 @@ form.addEventListener("submit", (event) => {
 
   nombre = document.getElementById("idNombre").value;
   nombreDestinatario = document.getElementById("idDestinatario").value;
-  pais = document.getElementById("idPais").value;
-
-  if(pais === "españa") {
-    divisa = "pesos argentinos"
-  } else if(pais === "argentina") {
-    divisa = "euros"
-  }
-
-  dinero = parseInt(document.getElementById("idDinero").value);
-
-  console.log(nombre, nombreDestinatario, pais, dinero);
-
-  let impuestoDescontar = conversion(dinero, comision);
-
-  do {
-    impuesto = prompt(`${nombre}, la conversion de divisa le costara ${impuestoDescontar} ${divisa}, ¿desea continuar? Si/No.`).toLowerCase();
-  } while(impuesto != "si" && impuesto != "no")
-
-  let dineroTotal = total(dinero, impuestoDescontar);
   
-  if(impuesto === "si" && pais === "españa") {
-    dineroFinal = conversion(dineroTotal, euro);
-    alert( `Muchas gracias por usar nuestro servicio, le llegara a ${nombreDestinatario} en España la cantidad de ${dineroFinal} euros.`);
-  
-  } else if(impuesto === "si" && pais === "argentina") {
-    dineroFinal = conversion(dineroTotal, peso);
-    alert(`Muchas gracias por usar nuestro servicio, le llegara a ${nombreDestinatario} en Argentina la cantidad de ${dineroFinal} pesos argentinos.`);
-  } else {
-    dineroFinal = 0;
-    alert("Muchas gracias por su tiempo");
-  }
-
-  const movimiento = new Envios(nombre, nombreDestinatario, pais, dinero, impuestoDescontar, dineroFinal);
+  const movimiento = new Envios(nombre, nombreDestinatario, pais.value, dinero.value, impuestoDescontar, dineroFinal);
   movimientos.push(movimiento);
 
   console.log(movimiento);
@@ -67,9 +89,9 @@ form.addEventListener("submit", (event) => {
   const giros = document.getElementById("enviosGenerados");
 
   giros.innerHTML = "";
+  divComision.innerHTML = "";
   
-  movimientos.forEach(giro => {
-    
+  movimientos.forEach(giro => {  
     giros.innerHTML += `
       <div class="movimientoGenerado">
         <h3>Movimiento</h3>
