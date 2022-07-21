@@ -20,6 +20,70 @@ const comision = 0.05;
 
 let nombre, nombreDestinatario, dinero, impuesto, divisa, pais, continuar, impuestoDescontar;
 
+const form = document.getElementById("idForm");
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  nombre = document.getElementById("idNombre").value;
+  nombreDestinatario = document.getElementById("idDestinatario").value;
+  pais = document.getElementById("idPais").value;
+
+  if(pais === "españa") {
+    divisa = "pesos argentinos"
+  } else if(pais === "argentina") {
+    divisa = "euros"
+  }
+
+  dinero = parseInt(document.getElementById("idDinero").value);
+
+  console.log(nombre, nombreDestinatario, pais, dinero);
+
+  let impuestoDescontar = conversion(dinero, comision);
+
+  do {
+    impuesto = prompt(`${nombre}, la conversion de divisa le costara ${impuestoDescontar} ${divisa}, ¿desea continuar? Si/No.`).toLowerCase();
+  } while(impuesto != "si" && impuesto != "no")
+
+  let dineroTotal = total(dinero, impuestoDescontar);
+  
+  if(impuesto === "si" && pais === "españa") {
+    dineroFinal = conversion(dineroTotal, euro);
+    alert( `Muchas gracias por usar nuestro servicio, le llegara a ${nombreDestinatario} en España la cantidad de ${dineroFinal} euros.`);
+  
+  } else if(impuesto === "si" && pais === "argentina") {
+    dineroFinal = conversion(dineroTotal, peso);
+    alert(`Muchas gracias por usar nuestro servicio, le llegara a ${nombreDestinatario} en Argentina la cantidad de ${dineroFinal} pesos argentinos.`);
+  } else {
+    dineroFinal = 0;
+    alert("Muchas gracias por su tiempo");
+  }
+
+  const movimiento = new Envios(nombre, nombreDestinatario, pais, dinero, impuestoDescontar, dineroFinal);
+  movimientos.push(movimiento);
+
+  console.log(movimiento);
+
+  const giros = document.getElementById("enviosGenerados");
+
+  giros.innerHTML = "";
+  
+  movimientos.forEach(giro => {
+    
+    giros.innerHTML += `
+      <div class="movimientoGenerado">
+        <h3>Movimiento</h3>
+        <p>Nombre: ${giro.remitente}</p>
+        <p>Destinatario: ${giro.destinatario}</p>
+        <p>Pais Destino: ${giro.destino}</p>
+        <p>Dinero Ingresado: ${giro.cambio}</p>
+      </div>
+    `;
+  });
+
+  form.reset();
+});
+/*
 alert("Enviamos dinero entre España y Argentina, gracias por usar nuestro servicio. Pulse en Aceptar para continuar.");
 
 //solicitamos datos al usuario y a la vez los vamos validando
@@ -84,6 +148,7 @@ do {
 
   
 } while(continuar != "no")
+*/
 
 console.log(movimientos);
 

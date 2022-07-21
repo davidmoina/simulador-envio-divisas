@@ -11,8 +11,49 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>Envio de dinero entre España y Argentina</h1>
-  <h2>Gracias por usar nuestro Servicio</h2>
+  <header class="header">
+    <div><img src="" alt=""></div>
+    <div></div>
+  </header>
+  <main class="main">
+    <section class="section1">
+      <div class="contenedor--formulario">
+        <h3 class="formulario--titulo">Envio de Divisa</h3>
+        <form id="idForm" action="" class="formulario">
+          <div>
+          <label for="nombre">Nombre:</label>
+          <input required type="text" id="idNombre" name="nombre" placeholder="Ingrese su nombre..">
+          </div>
+    
+          <div>
+          <label for="idDestinatario">Destinatario:</label>
+          <input required type="text" id="idDestinatario" name="idDestinatario" placeholder="Ingrese el nombre del destinatario..">
+          </div>
+      
+          <div>
+            <label for="idPais">Seleccione país al que enviar el dinero:</label>
+            <select name="idPais" id="idPais">
+              <option value="españa">España</option>
+              <option value="argentina">Argentina</option>
+            </select>
+          </div>
+          <div>
+            <label for="idDinero" id="textoDinero">Ingrese la cantidad de dinero a enviar:</label>
+            <input required name="idDinero" id="idDinero" type="number">
+          </div>
+
+          <div>
+            <p id="comision"></p>
+          </div>
+
+          <div class="div__boton">
+            <button type="submit">Hacer Envio</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
   <div id="enviosGenerados" class="tarjetaEnvios">
 
   </div>
