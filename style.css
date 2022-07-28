@@ -7,26 +7,53 @@
 body {
   font-family: 'Poppins', sans-serif;
   background-color: azure;
+  transition: ease 0.5s;
 }
+
+.darkMode {
+  background-color: #202124;
+  color: white;
+}
+
 .header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   width: 100%;
   height: 50px;
   background-color: aquamarine;
 }
 
-.tarjetaEnvios {
-  display: flex;
+.botonTema {
+  display: inline-block;
+  width: 40px;
+  height: 25px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.tarjetasEnvios {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   justify-content: center;
   padding: 30px;
+  margin: 0 auto;
 }
 
 .movimientoGenerado {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 250px;
   padding: 15px;
   border: 2px solid black;
-  border-radius: 20px;
-  background-color: bisque;
   margin-bottom: 10px;
+}
+
+body.darkMode .movimientoGenerado {
+  border: 2px solid white;
 }
 
 .movimientoGenerado h2 {
@@ -39,10 +66,14 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 600px;
+  max-width: 600px;
   height: 600px;
   border: 2px solid black;
   margin: 40px auto;
+}
+
+body.darkMode .contenedor--formulario {
+  border: 2px solid white;
 }
 
 .formulario--titulo {
@@ -65,11 +96,17 @@ body {
   border-bottom: 1px solid black;
 }
 
-.formulario .div__boton {
+body.darkMode .formulario input, body.darkMode .formulario select {
+  border-bottom: 1px solid white;
+  color: white;
+}
+
+
+.div__boton {
   text-align: center;
 }
 
-.formulario .div__boton button {
+.div__boton button {
   min-width: 130px;
   height: 40px;
   color: #fff;
@@ -87,13 +124,13 @@ body {
   border: 2px solid #4433ff;
   color: #4433ff;
 }
-.formulario .div__boton button:hover {
+.div__boton button:hover {
   color: #fff;
 }
-.formulario .div__boton button:hover:after {
+.div__boton button:hover:after {
   width: 100%;
 }
-.formulario .div__boton button:after {
+.div__boton button:after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -103,4 +140,30 @@ body {
   width: 0;
   height: 100%;
   background: #4433ff;
+}
+
+.botonEliminar {
+  min-width: 130px;
+  height: 40px;
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 5px;
+  border: 2px solid #d90429;
+  background: #d90429;
+}
+.botonEliminar:hover {
+  background: #fff;
+  color: #d90429
+}
+
+@media(max-width: 650px) {
+  .tarjetasEnvios {
+    grid-template-columns: 1fr;
+  }
 }
