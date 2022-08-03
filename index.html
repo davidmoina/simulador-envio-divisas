@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <link rel="stylesheet" href="./style.css">
   <title>Document</title>
 </head>
@@ -29,20 +30,33 @@
           <label for="idDestinatario">Destinatario:</label>
           <input required type="text" id="idDestinatario" name="idDestinatario" placeholder="Ingrese el nombre del destinatario..">
           </div>
+
+          <div>
+            <label for="idPaisOrigen">Seleccione país de origen del envio:</label>
+            <select name="idPaisOrigen" id="idPaisOrigen">
+              <option value="España">España</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Estados Unidos">Estados Unidos</option>
+            </select>
+          </div>
       
           <div>
-            <label for="idPais">Seleccione país al que enviar el dinero:</label>
-            <select name="idPais" id="idPais">
-              <option value="españa">España</option>
-              <option value="argentina">Argentina</option>
+            <label for="idPaisDestino">Seleccione país al que enviar el dinero:</label>
+            <select name="idPaisDestino" id="idPaisDestino">
+              <option value="España">España</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Estados Unidos">Estados Unidos</option>
             </select>
           </div>
           <div id="divDinero">
-            <label for="idDinero" id="textoDinero">Ingrese la cantidad en pesos argentinos a enviar:</label>
-            <input required name="idDinero" id="idDinero" type="number">
+            <label for="idDinero" id="textoDinero">Ingrese la cantidad en euros a enviar:</label>
+            <input required name="idDinero" id="idDinero" type="number" min="1" max="1000000">
           </div>
 
           <div id="divComision">
+          </div>
+          
+          <div id="divResultado">
           </div>
 
           <div class="div__boton">
@@ -60,6 +74,7 @@
   <div id="enviosGenerados" class="tarjetasEnvios">
 
   </div>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="./script.js"></script>
 </body>
 </html>
