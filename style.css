@@ -162,6 +162,11 @@ body.darkMode .formulario input, body.darkMode .formulario select {
   color: #d90429
 }
 
+.divOrdenar {
+  width: 75%;
+  margin: 0 auto;
+}
+
 @media(max-width: 650px) {
   .tarjetasEnvios {
     grid-template-columns: 1fr;

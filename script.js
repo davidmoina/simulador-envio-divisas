@@ -1,4 +1,4 @@
-//llamamos lo elementos para el modo claro-oscuro
+//llamamos los elementos del dom para el modo claro-oscuro
 const botonDarkMode = document.getElementById("botonDarkMode");
 const botonLightMode = document.getElementById("botonLightMode");
 let darkMode
@@ -28,11 +28,20 @@ botonLightMode.addEventListener("click", () => {
 const total = (num1, num2) => num1 - num2;
 const conversion = (num1, num2) => num1 * num2;
 
+//funcion para tener un id unico para cada movimiento
+let generadorId = function () {
+  let ultimoId = localStorage.getItem("ultimoId") || "0";
+  let nuevoId = JSON.parse(ultimoId) + 1;
+  localStorage.setItem("ultimoId", JSON.stringify(nuevoId));
+  return nuevoId;
+}
+
 
 
 //clase para hacer los arrays de movimientos
 class Envios {
-  constructor(remitente, destinatario, origen, destino, cantidad, comision, cambio) {
+  constructor(id, remitente, destinatario, origen, destino, cantidad, comision, cambio) {
+    this.id = id;
     this.remitente = remitente;
     this.destinatario = destinatario;
     this.origen = origen;
@@ -40,6 +49,7 @@ class Envios {
     this.cantidad = cantidad;
     this.comision = comision;
     this.cambio = cambio;
+    
   }
 }
 
@@ -87,7 +97,6 @@ let divComision = document.getElementById("divComision");
 dinero.addEventListener("input", () => {
 
   divisaFuncion(paisOrigen.value);
-  console.log(divisa);
 
   //llamamos la funcion flecha para descontar el impuesto
   impuestoDescontar = parseFloat(conversion(dinero.value, comision).toFixed(2));
@@ -137,7 +146,7 @@ if(localStorage.getItem("movimientoStorage")) {
   localStorage.setItem("movimientoStorage", JSON.stringify(movimientos))
 }
 
-//aqui consultamos los datos del formulario y mandamos los datos al array y asu vez al local storage con los datos introducidos por el usuario
+//aqui consultamos los datos del formulario y mandamos los datos al array y a su vez al local storage con los datos introducidos por el usuario
 const form = document.getElementById("idForm");
 
 form.addEventListener("submit", (event) => {
@@ -146,7 +155,7 @@ form.addEventListener("submit", (event) => {
   nombre = document.getElementById("idNombre").value;
   nombreDestinatario = document.getElementById("idDestinatario").value;
   
-  const movimiento = new Envios(nombre, nombreDestinatario,paisOrigen.value, paisDestino.value, dinero.value, impuestoDescontar, dineroFinal);
+  const movimiento = new Envios(generadorId(), nombre, nombreDestinatario,paisOrigen.value, paisDestino.value, dinero.value, impuestoDescontar, dineroFinal);
   movimientos.push(movimiento);
 
   localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
@@ -157,34 +166,28 @@ form.addEventListener("submit", (event) => {
     text: "Dinero enviado correctamente",
     duration: 3000,
     close: true,
-    gravity: "top", // `top` or `bottom`
-    position: "right", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
+    gravity: "top",
+    position: "center",
+    stopOnFocus: true,
     style: {
       background: "linear-gradient(to right, #00b09b, #96c93d)",
     },
-    onClick: function(){} // Callback after click
+    onClick: function(){}
   }).showToast();
 
   form.reset();
 });
 
-//consulto el boton para mostrar los movimientos generados
-const botonMostrar = document.getElementById("botonMostrar");
-
-//cada vez que le demos al boton mostrar, este consultara el localstorage y a continuacion mostrara los movimientos en el DOM
-botonMostrar.addEventListener("click", () => {
-  
-  let arrayStorage = JSON.parse(localStorage.getItem("movimientoStorage"));
-  const giros = document.getElementById("enviosGenerados");
+//funcion para meter los elementos en el dom
+function dom(giros, array) {
 
   giros.innerHTML = "";
   
-  arrayStorage.forEach((giro, index) => {
+  array.forEach((giro, index) => {
     
     giros.innerHTML += `
       <div class="movimientoGenerado" id="movimiento${index}">
-        <h3>Movimiento ${index}</h3>
+        <h3>Movimiento ${giro.id}</h3>
         <p>Nombre: ${giro.remitente}</p>
         <p>Destinatario: ${giro.destinatario}</p>
         <p>Pais Origen: ${giro.origen}</p>
@@ -197,22 +200,81 @@ botonMostrar.addEventListener("click", () => {
     `;
 
   });
+}
 
-  //consultamos y le doy funcionalidad al boton para eliminar cierto movimiento tanto del array, dom y localstorage y muestro el movimiento eliminado en storage
-  arrayStorage.forEach((giro, index) => {
+//funcion eliminar elementos
+//consultamos y le doy funcionalidad al boton para eliminar cierto movimiento tanto del array, dom y localstorage y muestro el movimiento eliminado en consola
+function eliminarObjetos(array) {
+
+  array.forEach((giro, index) => {
 
     let botonCard = document.getElementById(`movimiento${index}`).lastElementChild;
+    
     botonCard.addEventListener("click", () => {
+      
       document.getElementById(`movimiento${index}`).remove();
-      movimientos.splice(giro, 1);
+      movimientos.splice(index, 1);
       localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
       console.log(`Movimiento de ${giro.remitente} eliminado correctamente.`);
-
+      botonMostrar.click();
     });
   });
+}
+
+//consulto el boton para mostrar los movimientos generados
+const botonMostrar = document.getElementById("botonMostrar");
+
+//cada vez que le demos al boton mostrar, este consultara el localstorage y a continuacion mostrara los movimientos en el DOM
+botonMostrar.addEventListener("click", () => {
+  
+  let arrayStorage = JSON.parse(localStorage.getItem("movimientoStorage"));
+  const giros = document.getElementById("enviosGenerados");
+
+  dom(giros, arrayStorage);
+
+  //lamo a la funcion para elminar los objetos del array en storage dom y array
+  eliminarObjetos(arrayStorage);
+
+  let divOrdenar = document.getElementById("divOrdenar");
+
+  divOrdenar.innerHTML = `
+    <label for="inputOrdenar">Ordenar por:</label>
+    <select name="inputOrdenar" id="inputOrdenar">
+      <option value="reciente">Mas Reciente</option>
+      <option value="ultimo">Ultimo movimiento</option>
+      <option value="cantidad mayor">Mayor a menor cantidad</option>
+      <option value="cantidad menor">Menor a mayor cantidad</option>
+    </select>
+  `
+
+  let inputOrdenar = document.getElementById("inputOrdenar");
+
+  //aqui se ordenaran los elementos segun el valorn que se seleccione el input
+  inputOrdenar.addEventListener("change", () =>{
+    if(inputOrdenar.value == "cantidad mayor") {
+      let menorMayor = movimientos.sort((a,b) => (b.cambio-a.cambio));
+
+      dom(giros, menorMayor);
+      eliminarObjetos(menorMayor);
+
+    } else if (inputOrdenar.value == "cantidad menor"){
+      let menorMayor = movimientos.sort((a,b) => (a.cambio-b.cambio));
+
+      dom(giros, menorMayor);
+      eliminarObjetos(menorMayor);
+
+    } else if(inputOrdenar.value == "ultimo") {
+      let ultimoReciente = JSON.parse(localStorage.getItem("movimientoStorage")).reverse();
+
+      dom(giros, ultimoReciente);
+      eliminarObjetos(ultimoReciente);
+
+    } else if(inputOrdenar.value == "reciente") {
+      let ultimoReciente = JSON.parse(localStorage.getItem("movimientoStorage"));
+
+      dom(giros, ultimoReciente);
+      eliminarObjetos(ultimoReciente);
+    } 
+  })
 
 });
-
-console.log(movimientos);
-
-
