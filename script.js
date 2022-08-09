@@ -216,10 +216,24 @@ function eliminarObjetos(array) {
       movimientos.splice(index, 1);
       localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
       console.log(`Movimiento de ${giro.remitente} eliminado correctamente.`);
+
+      Toastify({
+        text: `Registro eliminado correctamente`,
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #DE1508, #A90C7C)",
+        },
+        onClick: function(){}
+      }).showToast();
+
       botonMostrar.click();
     });
   });
-}
+};
 
 //consulto el boton para mostrar los movimientos generados
 const botonMostrar = document.getElementById("botonMostrar");
@@ -252,28 +266,28 @@ botonMostrar.addEventListener("click", () => {
   //aqui se ordenaran los elementos segun el valorn que se seleccione el input
   inputOrdenar.addEventListener("change", () =>{
     if(inputOrdenar.value == "cantidad mayor") {
-      let menorMayor = movimientos.sort((a,b) => (b.cambio-a.cambio));
+      let mayorMenor = movimientos.sort((a,b) => (b.cambio-a.cambio));
 
-      dom(giros, menorMayor);
-      eliminarObjetos(menorMayor);
+      dom(giros, mayorMenor);
+      eliminarObjetos(arrayStorage);
 
-    } else if (inputOrdenar.value == "cantidad menor"){
+    }
+    if (inputOrdenar.value == "cantidad menor"){
       let menorMayor = movimientos.sort((a,b) => (a.cambio-b.cambio));
 
       dom(giros, menorMayor);
-      eliminarObjetos(menorMayor);
+      eliminarObjetos(arrayStorage);
 
-    } else if(inputOrdenar.value == "ultimo") {
-      let ultimoReciente = JSON.parse(localStorage.getItem("movimientoStorage")).reverse();
-
-      dom(giros, ultimoReciente);
-      eliminarObjetos(ultimoReciente);
-
-    } else if(inputOrdenar.value == "reciente") {
-      let ultimoReciente = JSON.parse(localStorage.getItem("movimientoStorage"));
+    }
+    if(inputOrdenar.value == "ultimo") {
+      let ultimoReciente = movimientos.sort((a,b) => (b.id-a.id));
 
       dom(giros, ultimoReciente);
-      eliminarObjetos(ultimoReciente);
+      eliminarObjetos(arrayStorage);
+
+    }
+    if(inputOrdenar.value == "reciente") {
+      botonMostrar.click();
     } 
   })
 
