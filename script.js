@@ -36,6 +36,66 @@ let generadorId = function () {
   return nuevoId;
 }
 
+// uso una api  para ver la cotizacion de las divisas y mostrarlas
+let precioActualEur = document.getElementById("precioActualEur");
+let precioActualArs = document.getElementById("precioActualArs");
+let precioActualUsd = document.getElementById("precioActualUsd");
+let fechas = document.getElementById("fechas");
+
+let myHeaders = new Headers();
+myHeaders.append("apikey", "aPVjUJ15bLrXtVRZe4JTyY1Y4Hf1JQSM");
+
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  headers: myHeaders
+};
+
+//funcion para obtener datos de un api e imprimirlos en el dom
+
+function obtenerCambio() {
+  fetch("https://api.apilayer.com/exchangerates_data/latest?symbols=ARS%2CUSD&base=EUR", requestOptions)
+  .then(response => response.json())
+  .then(({date, rates}) => {
+    precioActualEur.innerHTML = `
+        <h4>Cotizaciones del euro</h4>
+        <p>EUR/USD: ${rates.USD}$</p>
+        <p>EUR/ARS: $${rates.ARS}</p>
+      `
+    fechas.innerHTML = `
+      <p>Actualizado el ${date}</p>
+    `
+
+  })
+
+  fetch("https://api.apilayer.com/exchangerates_data/latest?symbols=EUR%2CUSD&base=ARS", requestOptions)
+  .then(response => response.json())
+  .then(({date, rates}) => {
+    precioActualArs.innerHTML = `
+          <h4>Cotizaciones del peso argentino</h4>
+          <p>ARS/USD: ${rates.USD}$</p>
+          <p>ARS/EUR: ${rates.EUR}€</p>
+    `;
+  })
+
+  fetch("https://api.apilayer.com/exchangerates_data/latest?symbols=EUR%2CARS&base=USD", requestOptions)
+  .then(response => response.json())
+  .then(({date, rates}) => {
+    precioActualUsd.innerHTML = `
+          <h4>Cotizaciones del dolar</h4>
+          <p>USD/ARS: $${rates.ARS}</p>
+          <p>USD/EUR: ${rates.EUR}$</p>
+    `;
+  })
+};
+
+obtenerCambio();
+
+//creo un intervalo para que llame la funcion obtenercambio cada 12 horas
+//y se actualizen los precios de las monedas
+setInterval(() => {
+  obtenerCambio();
+}, 43200000)
 
 
 //clase para hacer los arrays de movimientos

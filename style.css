@@ -167,8 +167,39 @@ body.darkMode .formulario input, body.darkMode .formulario select {
   margin: 0 auto;
 }
 
+.seccionSup {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.seccionSup h2 {
+  margin-bottom: 20px;
+}
+
+.contenedorCotizaciones {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+}
+
+.contenedorCotizaciones div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 270px;
+}
+
+.fechas {
+  margin: 20px auto;
+}
+
+
 @media(max-width: 650px) {
   .tarjetasEnvios {
     grid-template-columns: 1fr;
+  }
+
+  .contenedorCotizaciones {
+    flex-direction: column;
   }
 }
