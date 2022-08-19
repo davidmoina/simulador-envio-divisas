@@ -25,8 +25,8 @@ botonLightMode.addEventListener("click", () => {
 });
 
 // funciones flecha para hacer operaciones
-const total = (num1, num2) => num1 - num2;
-const conversion = (num1, num2) => num1 * num2;
+const total = (num1, num2) => parseFloat((num1 - num2).toFixed(2));
+const conversion = (num1, num2) => parseFloat((num1 * num2).toFixed(2));
 
 //funcion para tener un id unico para cada movimiento
 let generadorId = function () {
@@ -37,6 +37,7 @@ let generadorId = function () {
 }
 
 // uso una api  para ver la cotizacion de las divisas y mostrarlas
+/*
 let precioActualEur = document.getElementById("precioActualEur");
 let precioActualArs = document.getElementById("precioActualArs");
 let precioActualUsd = document.getElementById("precioActualUsd");
@@ -96,7 +97,7 @@ obtenerCambio();
 setInterval(() => {
   obtenerCambio();
 }, 43200000)
-
+*/
 
 //clase para hacer los arrays de movimientos
 class Envios {
@@ -214,28 +215,37 @@ form.addEventListener("submit", (event) => {
 
   nombre = document.getElementById("idNombre").value;
   nombreDestinatario = document.getElementById("idDestinatario").value;
-  
-  const movimiento = new Envios(generadorId(), nombre, nombreDestinatario,paisOrigen.value, paisDestino.value, dinero.value, impuestoDescontar, dineroFinal);
-  movimientos.push(movimiento);
-
-  localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
 
   divComision.innerHTML = "";
+  divisaFuncion(paisDestino.value)
 
-  Toastify({
-    text: "Dinero enviado correctamente",
-    duration: 3000,
-    close: true,
-    gravity: "top",
-    position: "center",
-    stopOnFocus: true,
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-    onClick: function(){}
-  }).showToast();
+//lanzamos una alerta con sweetAlert para que decida si efectuar o no el envio
+  Swal.fire({
+    title: '¿Quiere efectuar el envio?',
+    text: `Le llegara a ${nombreDestinatario} en ${paisDestino.value} la cantidad de ${dineroFinal} ${divisa}`,
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#3FA74C',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Confirmar',
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Enviado',
+        'El dinero ha sido enviado.',
+        'success'
+      )
+      const movimiento = new Envios(generadorId(), nombre, nombreDestinatario,paisOrigen.value, paisDestino.value, dinero.value, impuestoDescontar, dineroFinal);
+      movimientos.push(movimiento);
 
-  form.reset();
+      localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
+
+      form.reset();
+    }
+  })
+
+  
 });
 
 //funcion para meter los elementos en el dom
@@ -352,3 +362,11 @@ botonMostrar.addEventListener("click", () => {
   })
 
 });
+
+//llamo el boton para ocultar los movimientos y le doy funcionalidad
+const botonOcultar = document.getElementById("botonOcultar");
+
+botonOcultar.addEventListener("click", () => {
+  divOrdenar.innerHTML = "";
+  enviosGenerados.innerHTML = "";
+})
