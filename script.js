@@ -233,7 +233,7 @@ form.addEventListener("submit", (event) => {
     if (result.isConfirmed) {
       Swal.fire(
         'Enviado',
-        'El dinero ha sido enviado.',
+        'El dinero ha sido enviado correctamente.',
         'success'
       )
       const movimiento = new Envios(generadorId(), nombre, nombreDestinatario,paisOrigen.value, paisDestino.value, dinero.value, impuestoDescontar, dineroFinal);
@@ -284,11 +284,12 @@ function eliminarObjetos(array) {
       
       document.getElementById(`movimiento${index}`).remove();
       movimientos.splice(index, 1);
+      movimientos.sort((a,b) => (a.id-b.id))
       localStorage.setItem("movimientoStorage", JSON.stringify(movimientos));
-      console.log(`Movimiento de ${giro.remitente} eliminado correctamente.`);
+      console.log(`Movimiento de ${giro.id} eliminado correctamente.`);
 
       Toastify({
-        text: `Registro eliminado correctamente`,
+        text: `Movimiento ${giro.id} eliminado correctamente`,
         duration: 3000,
         close: true,
         gravity: "top",
@@ -339,21 +340,21 @@ botonMostrar.addEventListener("click", () => {
       let mayorMenor = movimientos.sort((a,b) => (b.cambio-a.cambio));
 
       dom(giros, mayorMenor);
-      eliminarObjetos(arrayStorage);
+      eliminarObjetos(mayorMenor);
 
     }
     if (inputOrdenar.value == "cantidad menor"){
       let menorMayor = movimientos.sort((a,b) => (a.cambio-b.cambio));
 
       dom(giros, menorMayor);
-      eliminarObjetos(arrayStorage);
+      eliminarObjetos(menorMayor);
 
     }
     if(inputOrdenar.value == "ultimo") {
       let ultimoReciente = movimientos.sort((a,b) => (b.id-a.id));
 
       dom(giros, ultimoReciente);
-      eliminarObjetos(arrayStorage);
+      eliminarObjetos(ultimoReciente);
 
     }
     if(inputOrdenar.value == "reciente") {

@@ -8,6 +8,7 @@ body {
   font-family: 'Poppins', sans-serif;
   background-color: azure;
   transition: ease 0.5s;
+  padding: 0 !important;
 }
 
 .darkMode {
