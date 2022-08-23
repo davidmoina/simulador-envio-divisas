@@ -37,7 +37,6 @@ let generadorId = function () {
 }
 
 // uso una api  para ver la cotizacion de las divisas y mostrarlas
-/*
 let precioActualEur = document.getElementById("precioActualEur");
 let precioActualArs = document.getElementById("precioActualArs");
 let precioActualUsd = document.getElementById("precioActualUsd");
@@ -92,12 +91,11 @@ function obtenerCambio() {
 
 obtenerCambio();
 
-//creo un intervalo para que llame la funcion obtenercambio cada 12 horas
+//creo un intervalo para que llame la funcion obtenercambio cada 1 hora
 //y se actualizen los precios de las monedas
 setInterval(() => {
   obtenerCambio();
-}, 43200000)
-*/
+}, 3600000)
 
 //clase para hacer los arrays de movimientos
 class Envios {
@@ -289,7 +287,7 @@ function eliminarObjetos(array) {
       console.log(`Movimiento de ${giro.id} eliminado correctamente.`);
 
       Toastify({
-        text: `Movimiento ${giro.id} eliminado correctamente`,
+        text: `Movimiento ${giro.id} eliminado del registro`,
         duration: 3000,
         close: true,
         gravity: "top",
@@ -334,7 +332,7 @@ botonMostrar.addEventListener("click", () => {
 
   let inputOrdenar = document.getElementById("inputOrdenar");
 
-  //aqui se ordenaran los elementos segun el valorn que se seleccione el input
+  //aqui se ordenaran los elementos segun el valor que se seleccione el input
   inputOrdenar.addEventListener("change", () =>{
     if(inputOrdenar.value == "cantidad mayor") {
       let mayorMenor = movimientos.sort((a,b) => (b.cambio-a.cambio));
